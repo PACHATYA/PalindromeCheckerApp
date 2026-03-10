@@ -1,12 +1,11 @@
+import java.util.Deque;
+import java.util.ArrayDeque;
 import java.util.Scanner;
-import java.util.Queue;
-import java.util.LinkedList;
-import java.util.Stack;
 
 public class PallindromeCheckerApp {
 
     /**
-     * Application entry point for UC6.
+     * Application entry point for UC7.
      *
      * @param args Command-line arguments
      */
@@ -14,53 +13,41 @@ public class PallindromeCheckerApp {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("======================================");
-        System.out.println("   UC6 - Queue + Stack Palindrome Check");
-        System.out.println("======================================");
-
+        System.out.println("=== UC7 : Deque Based Optimized Palindrome Checker ===");
         System.out.print("Enter a string: ");
+
         String input = scanner.nextLine();
 
         // Convert to lowercase for case-insensitive comparison
         input = input.toLowerCase();
 
-        // Create Queue and Stack
-        Queue<Character> queue = new LinkedList<>();
-        Stack<Character> stack = new Stack<>();
+        // Create a Deque
+        Deque<Character> deque = new ArrayDeque<>();
 
-        // Insert characters into both structures
+        // Insert all characters into deque
         for (int i = 0; i < input.length(); i++) {
-            char ch = input.charAt(i);
-            queue.add(ch);   // FIFO
-            stack.push(ch);  // LIFO
+            deque.addLast(input.charAt(i));
         }
 
         boolean isPalindrome = true;
 
-        // Compare elements
-        while (!queue.isEmpty()) {
-            char fromQueue = queue.remove();   // Front element
-            char fromStack = stack.pop();      // Top element
+        // Compare characters from both ends
+        while (deque.size() > 1) {
+            char first = deque.removeFirst();
+            char last = deque.removeLast();
 
-            if (fromQueue != fromStack) {
+            if (first != last) {
                 isPalindrome = false;
                 break;
             }
         }
 
-        System.out.println("--------------------------------------");
-
+        // Display Result
         if (isPalindrome) {
-            System.out.println("\"" + input + "\" is a PALINDROME.");
+            System.out.println("\"" + input + "\" is a Palindrome.");
         } else {
-            System.out.println("\"" + input + "\" is NOT a palindrome.");
+            System.out.println("\"" + input + "\" is NOT a Palindrome.");
         }
-
-        System.out.println("--------------------------------------");
-        System.out.println("Explanation:");
-        System.out.println("Queue removes characters in FIFO order.");
-        System.out.println("Stack removes characters in LIFO order.");
-        System.out.println("Matching both confirms symmetric structure.");
 
         scanner.close();
     }
