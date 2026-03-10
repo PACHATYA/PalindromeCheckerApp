@@ -1,51 +1,47 @@
-import java.util.LinkedList;
 import java.util.Scanner;
+
 public class PalindromeCheckerApp {
 
     /**
-     * Application entry point for UC8.
+     * Application entry point for UC9.
      *
      * @param args Command-line arguments
      */
     public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter String -> ");
+        String input = sc.nextLine();
 
-        Scanner scanner = new Scanner(System.in);
+        boolean result = check(input, 0, input.length() - 1);
 
-        System.out.println("=== UC8: LinkedList Based Palindrome Checker ===");
-        System.out.print("Enter a word: ");
-        String input = scanner.nextLine();
+        System.out.println("Input : " + input);
+        System.out.println("Is Palindrome? : " + result);
+        sc.close();
+    }
 
-        // Convert input to lowercase for case-insensitive comparison
-        input = input.toLowerCase();
+    /**
+     * Recursively checks whether a string is a palindrome.
+     *
+     * @param s     Input string
+     * @param start Starting index
+     * @param end   Ending index
+     * @return true if palindrome, otherwise false
+     */
+    private static boolean check(String s, int start, int end) {
 
-        // Create LinkedList of Characters
-        LinkedList<Character> charList = new LinkedList<>();
-
-        // Add characters to LinkedList
-        for (char ch : input.toCharArray()) {
-            charList.add(ch);
+        // Base Condition: If start crosses or meets end, all characters matched
+        if (start >= end) {
+            return true;
         }
 
-        boolean isPalindrome = true;
-
-        // Compare characters from both ends
-        while (charList.size() > 1) {
-            char first = charList.removeFirst();
-            char last = charList.removeLast();
-
-            if (first != last) {
-                isPalindrome = false;
-                break;
-            }
+        // If characters at start and end do not match, not a palindrome
+        if (s.charAt(start) != s.charAt(end)) {
+            return false;
         }
 
-        // Display Result
-        if (isPalindrome) {
-            System.out.println("\"" + input + "\" is a Palindrome.");
-        } else {
-            System.out.println("\"" + input + "\" is NOT a Palindrome.");
-        }
+        // Recursive call moving inward
+        return check(s, start + 1, end - 1);
 
-        scanner.close();
+
     }
 }
