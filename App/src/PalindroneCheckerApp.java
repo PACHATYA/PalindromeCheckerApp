@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class PalindromeCheckerApp {
 
     /**
-     * Application entry point for UC11.
+     * Application entry point for UC12.
      *
      * @param args Command-line arguments
      */
@@ -13,11 +13,10 @@ public class PalindromeCheckerApp {
         System.out.print("Enter String -> ");
         String input = sc.nextLine();
 
-        // Create service object
-        PalindromeService service = new PalindromeService();
+        // Inject strategy at runtime
+        PalindromeStrategy strategy = new StackStrategy();
 
-        // Call service method
-        boolean result = service.checkPalindrome(input);
+        boolean result = strategy.check(input);
 
         System.out.println("Input : " + input);
         System.out.println("Is Palindrome? : " + result);
@@ -27,34 +26,60 @@ public class PalindromeCheckerApp {
 }
 
 /**
- * Service class that contains palindrome logic.
+ * INTERFACE - PalindromeStrategy
+ *
+ * This interface defines a contract for all
+ * palindrome checking algorithms.
+ *
+ * Any new algorithm must implement this interface
+ * and provide its own validation logic.
  */
-class PalindromeService {
+interface PalindromeStrategy {
 
     /**
-     * Checks whether the input string is a palindrome.
+     * Checks whether input string is a palindrome.
      *
-     * @param input Input string
+     * @param input String to validate
      * @return true if palindrome, false otherwise
      */
-    public boolean checkPalindrome(String input) {
+    boolean check(String input);
+}
 
-        // Optional normalization (same as UC10)
+/**
+ * CLASS - StackStrategy
+ *
+ * This class provides a Stack-based implementation
+ * of the PalindromeStrategy interface.
+ *
+ * It uses LIFO behavior to reverse characters
+ * and compare them with the original sequence.
+ */
+class StackStrategy implements PalindromeStrategy {
+
+    /**
+     * Implements palindrome validation using Stack.
+     *
+     * @param input String to validate
+     * @return true if palindrome, false otherwise
+     */
+    public boolean check(String input) {
+
+        // Normalize input (optional but consistent with UC10/UC11)
         String normalized = input.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
 
-        // Initialize pointers
-        int start = 0;
-        int end = normalized.length() - 1;
+        // Create a stack to store characters
+        java.util.Stack<Character> stack = new java.util.Stack<>();
 
-        // Compare characters moving inward
-        while (start < end) {
+        // Push each character onto the stack
+        for (char c : normalized.toCharArray()) {
+            stack.push(c);
+        }
 
-            if (normalized.charAt(start) != normalized.charAt(end)) {
+        // Compare characters by popping from stack
+        for (char c : normalized.toCharArray()) {
+            if (c != stack.pop()) {
                 return false;
             }
-
-            start++;
-            end--;
         }
 
         return true;
